@@ -1,0 +1,35 @@
+name: 'WP Engine SSH Setup'
+description: 'Configures an SSH connection'
+inputs:
+  ssh_user:
+    description: 'SSH username'
+    required: true
+  ssh_key:
+    description: 'SSH private key'
+    required: true
+  ssh_host:
+    description: 'SSH host'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - run: |
+        SSH_PATH="$HOME/.ssh"
+        KNOWN_HOSTS_PATH="$SSH_PATH/known_hosts"
+        SSH_KEY_PRIVATE_PATH="$SSH_PATH/github_action"
+        mkdir -p "$SSH_PATH"
+        ssh-keyscan -t rsa "${{ inputs.ssh_host }}" >> "$KNOWN_HOSTS_PATH"
+        echo "${{ inputs.ssh_key }}" > "$SSH_KEY_PRIVATE_PATH"
+
+        chmod 700 "$SSH_PATH"
+        chmod 644 "$KNOWN_HOSTS_PATH"
+        chmod 600 "$SSH_KEY_PRIVATE_PATH"
+
+        cat >>~/.ssh/config <<END
+        Host wpengine
+          HostName ${{ inputs.ssh_host }}
+          User ${{ inputs.ssh_user }}
+          IdentityFile $SSH_KEY_PRIVATE_PATH
+          StrictHostKeyChecking no
+        END
+      shell: bash
