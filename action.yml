@@ -34,6 +34,5 @@ runs:
           StrictHostKeyChecking no
           ControlMaster auto
           ControlPath $SSH_PATH/ctl/%C
-          RSyncCommand "ssh -p 22 -o StrictHostKeyChecking=no -o 'ControlPath=$SSH_PATH/ctl/%C'"
         END
       shell: bash
