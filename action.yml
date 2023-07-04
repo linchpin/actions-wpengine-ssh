@@ -18,6 +18,7 @@ runs:
         KNOWN_HOSTS_PATH="$SSH_PATH/known_hosts"
         SSH_KEY_PRIVATE_PATH="$SSH_PATH/github_action"
         mkdir -p "$SSH_PATH"
+        mkdir -p "$SSH_PATH/ctl"
         ssh-keyscan -t rsa "${{ inputs.ssh_host }}" >> "$KNOWN_HOSTS_PATH"
         echo "${{ inputs.ssh_key }}" > "$SSH_KEY_PRIVATE_PATH"
 
